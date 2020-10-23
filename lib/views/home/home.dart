@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
           return Scaffold(
             key: _scaffoldKey,
             appBar: AppBar(
-              title: Text('首页 ${state.other.count}'),
+              title: Text('首页 outher count：${state.other.count}'),
             ),
             drawer: Drawer(
                 child: ListView(
