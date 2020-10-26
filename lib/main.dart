@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
     return StoreProvider(
       store: store,
       child: MaterialApp(
-        title: 'flutter widget使用',
+        title: 'flutter widget使用main',
         theme: ThemeData(
           primarySwatch: store.state.themeColor.primarySwatch,
           visualDensity: VisualDensity.adaptivePlatformDensity,
