@@ -10,7 +10,7 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
           return Scaffold(
             key: _scaffoldKey,
             appBar: AppBar(
-              title: Text('首页 的outher count：${state.other.count}'),
+              title: Text('首页'),
             ),
             drawer: Drawer(
                 child: ListView(
@@ -35,9 +35,7 @@ class _HomeState extends State<Home> {
                   leading: Icon(Icons.settings),
                   title: Text('设置'),
                   trailing: Icon(Icons.keyboard_arrow_right),
-                  onTap: () {
-                    _bottomModalSheet(context: context);
-                  },
+                  onTap: () {},
                 ),
                 Divider()
               ],
@@ -97,6 +95,11 @@ class _HomeState extends State<Home> {
                           return () => store.dispatch({'type': Types.action2});
                         },
                       ),
+                      RaisedButton(
+                          child: Text('切换主题'),
+                          onPressed: () {
+                            _showThemeColor.call(context);
+                          })
                     ],
                   ),
                   flex: 1,
@@ -107,35 +110,45 @@ class _HomeState extends State<Home> {
         });
   }
 
-  _bottomModalSheet({@required BuildContext context}) {
+  _showThemeColor(BuildContext context) {
     showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) => StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-          return ListView(
-            children: [
-              StoreConnector<IState, VoidCallback>(
-                  converter: (store) {
-                    return () => store.dispatch(
+        context: context,
+        builder: (context) => ListView(
+              children: [
+                StoreConnector<IState, VoidCallback>(
+                  converter: (store) => () {
+                    Navigator.pop(context);
+                    return store.dispatch(
                         {'type': Types.changeTheme, 'payload': Colors.red});
                   },
-                  builder: (context, callback) => ListTile(
-                        title: Text('更换主题'),
-                        onTap: callback,
-                      )),
-              Divider(),
-              StoreConnector<IState, VoidCallback>(
-                  converter: (store) {
-                    return () => store.dispatch({'type': Types.action2});
+                  builder: (context, callback) => FlatButton(
+                    onPressed: callback,
+                    child: Text(
+                      '红色',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ),
+                Divider(height: 0,),
+                StoreConnector<IState, VoidCallback>(
+                  converter: (store) => () {
+                    Navigator.pop(context);
+                    return store.dispatch(
+                        {'type': Types.changeTheme, 'payload': Colors.blue});
                   },
-                  builder: (context, callback) => ListTile(
-                        title: Text('other数字增加'),
-                        onTap: callback,
-                      )),
-            ],
-          );
-        },
-      ),
-    );
+                  builder: (context, callback) => FlatButton(
+                    onPressed: callback,
+                    child: Text(
+                      '蓝色',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                )
+              ],
+            ));
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

@@ -24,14 +24,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreProvider(
       store: store,
-      child: MaterialApp(
-        title: 'flutter widget使用2',
-        theme: ThemeData(
-          primarySwatch: store.state.themeColor.primarySwatch,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: MyHomePage(title: ''),
-      ),
+      child: StoreConnector<IState,IState>(
+          converter: (store) => store.state,
+          builder: (context, state) {
+            return MaterialApp(
+              title: 'flutter widget使用',
+              theme: ThemeData(
+                primarySwatch: state.themeColor.primarySwatch,
+                visualDensity: VisualDensity.adaptivePlatformDensity,
+              ),
+              home: MyHomePage(title: ''),
+            );
+          }),
     );
   }
 }
