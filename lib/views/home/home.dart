@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_widget_use/language/languageLocalizations.dart';
+import 'package:flutter_widget_use/main.dart';
 import 'package:flutter_widget_use/redux/reducer.dart';
 import 'package:flutter_widget_use/redux/states.dart';
+
+import 'accept.dart';
 
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
@@ -10,8 +14,9 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String _acceptPram;
   @override
   Widget build(BuildContext context) {
     return StoreConnector<IState, IState>(
@@ -19,9 +24,7 @@ class _HomeState extends State<Home> {
         builder: (context, state) {
           return Scaffold(
             key: _scaffoldKey,
-            appBar: AppBar(
-              title: Text('首页 outher count：${state.other.count}'),
-            ),
+            appBar: AppBar(title: Text(LanguageLocalizations.of(context).home)),
             drawer: Drawer(
                 child: ListView(
               children: [
@@ -35,9 +38,7 @@ class _HomeState extends State<Home> {
                   leading: Icon(Icons.settings),
                   title: Text('设置'),
                   trailing: Icon(Icons.keyboard_arrow_right),
-                  onTap: () {
-                    _bottomModalSheet(context: context);
-                  },
+                  onTap: () {},
                 ),
                 Divider()
               ],
@@ -97,6 +98,35 @@ class _HomeState extends State<Home> {
                           return () => store.dispatch({'type': Types.action2});
                         },
                       ),
+                      RaisedButton(
+                        child:
+                            Text(LanguageLocalizations.of(context).changeTheme),
+                        onPressed: () {
+                          _showThemeColor.call(context);
+                        },
+                      ),
+                      RaisedButton(
+                        child: Text(
+                            LanguageLocalizations.of(context).changeLanguage),
+                        onPressed: () {
+                          _showLanguageBottomModalSheet(context);
+                        },
+                      ),
+                      RaisedButton(
+                          child:
+                              Text('页面传值并且接受下一个页面返回的值是： ${_acceptPram ?? ''}'),
+                          onPressed: () async {
+                            String res = await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => Accept(
+                                  pram: 'hello 这是home',
+                                ),
+                              ),
+                            );
+                            setState(() {
+                              _acceptPram = res;
+                            });
+                          })
                     ],
                   ),
                   flex: 1,
@@ -107,35 +137,75 @@ class _HomeState extends State<Home> {
         });
   }
 
-  _bottomModalSheet({@required BuildContext context}) {
+  _showThemeColor(BuildContext context) {
     showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) => StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-          return ListView(
-            children: [
-              StoreConnector<IState, VoidCallback>(
-                  converter: (store) {
-                    return () => store.dispatch(
+        context: context,
+        builder: (context) => ListView(
+              children: [
+                StoreConnector<IState, VoidCallback>(
+                  converter: (store) => () {
+                    Navigator.pop(context);
+                    return store.dispatch(
                         {'type': Types.changeTheme, 'payload': Colors.red});
                   },
-                  builder: (context, callback) => ListTile(
-                        title: Text('更换主题'),
-                        onTap: callback,
-                      )),
-              Divider(),
-              StoreConnector<IState, VoidCallback>(
-                  converter: (store) {
-                    return () => store.dispatch({'type': Types.action2});
+                  builder: (context, callback) => FlatButton(
+                    onPressed: callback,
+                    child: Text(
+                      '红色',
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ),
+                Divider(
+                  height: 0,
+                ),
+                StoreConnector<IState, VoidCallback>(
+                  converter: (store) => () {
+                    Navigator.pop(context);
+                    return store.dispatch(
+                        {'type': Types.changeTheme, 'payload': Colors.blue});
                   },
-                  builder: (context, callback) => ListTile(
-                        title: Text('other数字增加'),
-                        onTap: callback,
-                      )),
-            ],
-          );
-        },
+                  builder: (context, callback) => FlatButton(
+                    onPressed: callback,
+                    child: Text(
+                      '蓝色',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                ),
+              ],
+            ));
+  }
+
+  // 语言切换
+  _showLanguageBottomModalSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => ListView(
+        children: [
+          FlatButton(
+              onPressed: () {
+                languageWrapState.currentState.changeLocale(
+                  const Locale('zh', 'CN'),
+                );
+              },
+              child: Text('中文')),
+          Divider(
+            height: 0,
+          ),
+          FlatButton(
+              onPressed: () {
+                languageWrapState.currentState.changeLocale(
+                  const Locale('en', 'US'),
+                );
+              },
+              child: Text('English')),
+        ],
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
