@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
               ),
               home: LanguageWrap(
                 key: languageWrapState,
-                child: MyHomePage(title: ''),
+                child: MyHomePage(title: 'dev'),
               ),
             );
           }),
