@@ -108,10 +108,13 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                       RaisedButton(
                         child: Text(
                             LanguageLocalizations.of(context).changeLanguage),
-                        onPressed: () {},
+                        onPressed: () {
+                          _showLanguageBottomModalSheet(context);
+                        },
                       ),
                       RaisedButton(
-                          child: Text('页面传值并且接受下一个页面返回的值是： ${_acceptPram??''}'),
+                          child:
+                              Text('页面传值并且接受下一个页面返回的值是： ${_acceptPram ?? ''}'),
                           onPressed: () async {
                             String res = await Navigator.of(context).push(
                               MaterialPageRoute(
@@ -172,6 +175,34 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                 ),
               ],
             ));
+  }
+
+  // 语言切换
+  _showLanguageBottomModalSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => ListView(
+        children: [
+          FlatButton(
+              onPressed: () {
+                languageWrapState.currentState.changeLocale(
+                  const Locale('zh', 'CN'),
+                );
+              },
+              child: Text('中文')),
+          Divider(
+            height: 0,
+          ),
+          FlatButton(
+              onPressed: () {
+                languageWrapState.currentState.changeLocale(
+                  const Locale('en', 'US'),
+                );
+              },
+              child: Text('English')),
+        ],
+      ),
+    );
   }
 
   @override
