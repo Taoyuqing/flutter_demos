@@ -88,12 +88,16 @@ class _MyHomePageState extends State<MyHomePage> {
             });
             _controller.jumpToPage(index);
           },
+          currentIndex: _currentIndex,
           items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
                 icon: Icon(Icons.home),
+                activeIcon: Icon(Icons.home),
                 title: Text(LanguageLocalizations.of(context).home)),
             BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle), title: Text(LanguageLocalizations.of(context).me)),
+                icon: Icon(Icons.account_circle),
+                activeIcon: Icon(Icons.account_circle),
+                title: Text(LanguageLocalizations.of(context).me)),
           ]),
     );
   }
