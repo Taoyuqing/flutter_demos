@@ -5,6 +5,8 @@ import 'package:flutter_widget_use/main.dart';
 import 'package:flutter_widget_use/redux/reducer.dart';
 import 'package:flutter_widget_use/redux/states.dart';
 
+import 'accept.dart';
+
 class Home extends StatefulWidget {
   Home({Key key}) : super(key: key);
 
@@ -14,6 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  String _acceptPram;
   @override
   Widget build(BuildContext context) {
     return StoreConnector<IState, IState>(
@@ -103,9 +106,24 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                         },
                       ),
                       RaisedButton(
-                          child: Text(
-                              LanguageLocalizations.of(context).changeLanguage),
-                          onPressed: () {})
+                        child: Text(
+                            LanguageLocalizations.of(context).changeLanguage),
+                        onPressed: () {},
+                      ),
+                      RaisedButton(
+                          child: Text('页面传值并且接受下一个页面返回的值是： ${_acceptPram??''}'),
+                          onPressed: () async {
+                            String res = await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => Accept(
+                                  pram: 'hello 这是home',
+                                ),
+                              ),
+                            );
+                            setState(() {
+                              _acceptPram = res;
+                            });
+                          })
                     ],
                   ),
                   flex: 1,
