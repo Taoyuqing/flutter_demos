@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_widget_use/language/languageLocalizations.dart';
 import 'package:flutter_widget_use/redux/states.dart';
 
 class Me extends StatefulWidget {
@@ -14,7 +15,7 @@ class _MeState extends State<Me> with AutomaticKeepAliveClientMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('我的'),
+        title: Text(LanguageLocalizations.of(context).me),
       ),
       body: StoreConnector<IState, IState>(
           converter: (store) => store.state,

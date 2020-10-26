@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_widget_use/language/languageLocalizations.dart';
+import 'package:flutter_widget_use/main.dart';
 import 'package:flutter_widget_use/redux/reducer.dart';
 import 'package:flutter_widget_use/redux/states.dart';
 
@@ -19,9 +21,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
         builder: (context, state) {
           return Scaffold(
             key: _scaffoldKey,
-            appBar: AppBar(
-              title: Text('首页'),
-            ),
+            appBar: AppBar(title: Text(LanguageLocalizations.of(context).home)),
             drawer: Drawer(
                 child: ListView(
               children: [
@@ -96,10 +96,16 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                         },
                       ),
                       RaisedButton(
-                          child: Text('切换主题'),
-                          onPressed: () {
-                            _showThemeColor.call(context);
-                          })
+                        child:
+                            Text(LanguageLocalizations.of(context).changeTheme),
+                        onPressed: () {
+                          _showThemeColor.call(context);
+                        },
+                      ),
+                      RaisedButton(
+                          child: Text(
+                              LanguageLocalizations.of(context).changeLanguage),
+                          onPressed: () {})
                     ],
                   ),
                   flex: 1,
@@ -129,7 +135,9 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                     ),
                   ),
                 ),
-                Divider(height: 0,),
+                Divider(
+                  height: 0,
+                ),
                 StoreConnector<IState, VoidCallback>(
                   converter: (store) => () {
                     Navigator.pop(context);
@@ -143,7 +151,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                       style: TextStyle(color: Colors.blue),
                     ),
                   ),
-                )
+                ),
               ],
             ));
   }

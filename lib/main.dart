@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_widget_use/redux/states.dart';
 import 'package:flutter_widget_use/redux/store.dart';
 import 'package:flutter_widget_use/views/home/home.dart';
 import 'package:flutter_widget_use/views/me/me.dart';
 import 'package:redux/redux.dart';
+
+import 'language/languageLocalizations.dart';
+import 'language/languageLocalizationsDelegate.dart';
 
 Store<IState> store = createStore();
 void main() {
@@ -24,10 +28,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreProvider(
       store: store,
-      child: StoreConnector<IState,IState>(
+      child: StoreConnector<IState, IState>(
           converter: (store) => store.state,
           builder: (context, state) {
             return MaterialApp(
+              localizationsDelegates: [
+                // 本地化的代理类
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                LanguageLocalizationsDelegate.delegate,
+              ],
+              supportedLocales: [
+                const Locale('en', 'US'), // 美国英语
+                const Locale('zh', 'CN'), // 中文简体
+                //其它Locales
+              ],
               title: 'flutter widget使用',
               theme: ThemeData(
                 primarySwatch: state.themeColor.primarySwatch,
@@ -74,9 +89,11 @@ class _MyHomePageState extends State<MyHomePage> {
             _controller.jumpToPage(index);
           },
           items: <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('首页')),
             BottomNavigationBarItem(
-                icon: Icon(Icons.account_circle), title: Text('我的')),
+                icon: Icon(Icons.home),
+                title: Text(LanguageLocalizations.of(context).home)),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.account_circle), title: Text(LanguageLocalizations.of(context).me)),
           ]),
     );
   }
