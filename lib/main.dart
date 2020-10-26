@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_widget_use/redux/states.dart';
 import 'package:flutter_widget_use/redux/store.dart';
+import 'package:flutter_widget_use/views/home/acceptByRouterName.dart';
 import 'package:flutter_widget_use/views/home/home.dart';
 import 'package:flutter_widget_use/views/langeuageWrap.dart';
 import 'package:flutter_widget_use/views/me/me.dart';
@@ -17,7 +18,9 @@ void main() {
     store: store,
   ));
 }
+
 GlobalKey<LanguageWrapState> languageWrapState = GlobalKey<LanguageWrapState>();
+
 class MyApp extends StatelessWidget {
   final Store<IState> store;
   const MyApp({
@@ -32,6 +35,7 @@ class MyApp extends StatelessWidget {
           converter: (store) => store.state,
           builder: (context, state) {
             return MaterialApp(
+              routes: {'acceptByRouterName': (context) => AcceptByRouterName()},
               localizationsDelegates: [
                 // 本地化的代理类
                 GlobalMaterialLocalizations.delegate,
