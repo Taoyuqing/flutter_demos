@@ -17,6 +17,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String _acceptPram;
+  String _acceptPram2;
   @override
   Widget build(BuildContext context) {
     return StoreConnector<IState, IState>(
@@ -113,20 +114,32 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
                         },
                       ),
                       RaisedButton(
-                          child:
-                              Text('页面传值并且接受下一个页面返回的值是： ${_acceptPram ?? ''}'),
-                          onPressed: () async {
-                            String res = await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => Accept(
-                                  pram: 'hello 这是home',
-                                ),
+                        child: Text('页面传值并且接受下一个页面返回的值是： ${_acceptPram ?? ''}'),
+                        onPressed: () async {
+                          String res = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => Accept(
+                                pram: 'hello 这是home',
                               ),
-                            );
-                            setState(() {
-                              _acceptPram = res;
-                            });
-                          })
+                            ),
+                          );
+                          setState(() {
+                            _acceptPram = res;
+                          });
+                        },
+                      ),
+                      RaisedButton(
+                        child: Text(
+                            '通过路由表跳转并且接受下一个页面返回的值是： ${_acceptPram2 ?? ''}'),
+                        onPressed: () async {
+                          dynamic res = await Navigator.of(context).pushNamed(
+                              'acceptByRouterName',
+                              arguments: {'h': '123456'});
+                          setState(() {
+                            _acceptPram2 = res;
+                          });
+                        },
+                      ),
                     ],
                   ),
                   flex: 1,
