@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_widget_use/components/willPopScopeRoute%20.dart';
 import 'package:flutter_widget_use/redux/states.dart';
 import 'package:flutter_widget_use/redux/store.dart';
 import 'package:flutter_widget_use/views/home/acceptByRouterName.dart';
@@ -52,9 +53,11 @@ class MyApp extends StatelessWidget {
                 primarySwatch: state.themeColor.primarySwatch,
                 visualDensity: VisualDensity.adaptivePlatformDensity,
               ),
-              home: LanguageWrap(
-                key: languageWrapState,
-                child: MyHomePage(title: 'dev'),
+              home: WillPopScopeRoute(
+                child: LanguageWrap(
+                  key: languageWrapState,
+                  child: MyHomePage(title: 'dev'),
+                ),
               ),
             );
           }),
