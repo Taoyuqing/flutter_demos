@@ -54,11 +54,7 @@ class MyApp extends StatelessWidget {
               ),
               home: LanguageWrap(
                 key: languageWrapState,
-<<<<<<< HEAD
                 child: MyHomePage(title: 'main'),
-=======
-                child: MyHomePage(title: 'dev'),
->>>>>>> dev
               ),
             );
           }),
